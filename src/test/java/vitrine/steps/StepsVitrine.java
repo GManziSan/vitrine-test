@@ -18,7 +18,7 @@ public class StepsVitrine {
     private Response response;
     private static String CONTA_NAME = "Conta " + System.nanoTime();
     private static String ALIAS_NAME = "Alias " + System.nanoTime();
-    private static Integer contaId;
+
 
     @Dado("uma categoria básica")
     public void umaCategoriaBásica() {
@@ -34,12 +34,9 @@ public class StepsVitrine {
     @Então("deve criar uma categoria")
     public void deveCriarUmaCategoria() {
         response.then().log().all()
-                .statusCode(200) //api retornando 200, deveria ser 201
-                .body("name", is(""+CONTA_NAME+""))
-               // .extract().path("id")
-        ;
+                .statusCode(201) //api retornando 200, deveria ser 201
+                .body("name", is(""+CONTA_NAME+""));
 
-        //response = requestSpecification.when().delete()
     }
 
     @Dado("uma categoria com nome já existente")
@@ -85,7 +82,7 @@ public class StepsVitrine {
     public void naoDeveCriarACategoriaCom(String carac) {
         response.then().log().all()
                 .statusCode(200) //api retornando 200, deveria ser 400
-               // .body("name", is(""+CONTA_NAME+""))
+
         ;
     }
 
