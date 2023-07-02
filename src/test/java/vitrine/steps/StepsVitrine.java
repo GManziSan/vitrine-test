@@ -65,7 +65,7 @@ public class StepsVitrine {
     @Então("deve criar uma categoria com {string}")
     public void deveCriarUmaCategoriaCom(String carac) {
         response.then().log().all()
-                .statusCode(200) //api retornando 200, deveria ser 201
+                .statusCode(201) //api retornando 200, deveria ser 201
                 .body("name", is(""+CONTA_NAME+""));
     }
 
@@ -81,7 +81,7 @@ public class StepsVitrine {
     @Então("nao deve criar a categoria com {string}")
     public void naoDeveCriarACategoriaCom(String carac) {
         response.then().log().all()
-                .statusCode(200) //api retornando 200, deveria ser 400
+                .statusCode(400) //api retornando 200, deveria ser 400
 
         ;
     }
