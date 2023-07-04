@@ -18,6 +18,7 @@ public class StepsVitrine {
     private Response response;
     private static String CONTA_NAME = "Conta " + System.nanoTime();
     private static String ALIAS_NAME = "Alias " + System.nanoTime();
+    private static Integer contaId;
 
 
     @Dado("uma categoria básica")
@@ -33,9 +34,11 @@ public class StepsVitrine {
    }
     @Então("deve criar uma categoria")
     public void deveCriarUmaCategoria() {
-        response.then().log().all()
-                .statusCode(201) //api retornando 200, deveria ser 201
-                .body("name", is(""+CONTA_NAME+""));
+       contaId = response.then().log().all()
+                .statusCode(200) //api retornando 200, deveria ser 201
+                .body("name", is(""+CONTA_NAME+""))
+                .extract().path("id")
+               ;
 
     }
 
@@ -102,18 +105,24 @@ public class StepsVitrine {
                 .body("{\"name\": \""+CONTA_NAME+"\"}");
     }
 
+    @Dado("uma categoria existente")
+    public void umaCategoriaExistente() {
+        requestSpecification = given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                ;
+    }
+    @Quando("chamar a api com delete para o endpoint")
+    public void chamarAApiComDeleteParaOEndpoint() {
+        response = requestSpecification.when().delete("http://64.226.114.207:3334/categories/" + contaId);
+    }
+    @Então("deve excluir a categoria")
+    public void deveExcluirACategoria() {
+        response.then().log().all()
+                .statusCode(204)
+                ;
+    }
 
-//     @After
-//     public void afterAll() {
-//        given()
-//                .log().all()
-//                .contentType(ContentType.JSON)
-//       .when()
-//                .delete("http://64.226.114.207:3334/categories/" + contaId)
-//       .then()
-//                .log().all()
-//                .statusCode(200)
-//    ;
-//    }
+
 
 }

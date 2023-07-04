@@ -42,4 +42,9 @@ Funcionalidade: Categorias
     Quando chamar a api com post para o endpoint "/categories"
     Então não deve criar uma categoria
 
+   Cenário: Deletar Categoria
+     Dado uma categoria existente
+     Quando chamar a api com delete para o endpoint
+     Então deve excluir a categoria
+
 
