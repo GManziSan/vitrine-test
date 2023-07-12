@@ -11,7 +11,7 @@ import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.delete;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class StepsVitrine {
     private RequestSpecification requestSpecification;
@@ -116,13 +116,75 @@ public class StepsVitrine {
     public void chamarAApiComDeleteParaOEndpoint() {
         response = requestSpecification.when().delete("http://64.226.114.207:3334/categories/" + contaId);
     }
-    @Então("deve excluir a categoria")
-    public void deveExcluirACategoria() {
-        response.then().log().all()
-                .statusCode(204)
-                ;
+        @Então("deve excluir a categoria")
+        public void deveExcluirACategoria () {
+            response.then().log().all()
+                    .statusCode(204)
+            ;
+        }
+
+        @Dado("um conjunto de categorias")
+        public void umConjuntoDeCategorias () {
+            requestSpecification = given()
+                    .log().all()
+                    .contentType(ContentType.JSON);
+        }
+        @Quando("chamar a api para listar")
+        public void chamarAApiParaListar () {
+            response = requestSpecification.when().get("http://64.226.114.207:3334/categories/");
+        }
+        @Então("deve listar as categorias")
+        public void deveListarAsCategorias () {
+            response.then()
+                    .log().all()
+                    .body("name", hasItems("sala", "quarto", "office"))
+                    .body("alias", hasItems("areaexterna", "gastronomia", "sale"))
+            ;
+        }
+
+        @Quando("chamar a api para listar por nome")
+        public void chamarAApiParaListarPorNome () {
+            response = requestSpecification.when().get("http://64.226.114.207:3334/categoriesByName/banheiro");
+        }
+        @Então("deve listar as categorias por nome")
+        public void deveListarAsCategoriasPorNome () {
+            response.then()
+                    .log().all()
+//                .body("$", hasSize(4))
+                    .body("id", hasItem(5))
+                    .body("name", hasItem("banheiro"))
+                    .body("alias", hasItem("banheiro"))
+            ;
+        }
+        @Quando("chamar a api para listar por alias")
+        public void chamarAApiParaListarPorAlias () {
+            response = requestSpecification.when().get("http://64.226.114.207:3334/categoriesByAlias/areaexterna");
+
+        }
+        @Então("deve listar as categorias por alias")
+        public void deveListarAsCategoriasPorAlias () {
+            response.then()
+                    .log().all()
+//                .body("$", hasSize(4))
+                    .body("id", hasItem(6))
+                    .body("name", hasItem("área externa"))
+                    .body("alias", hasItem("areaexterna"))
+            ;
+        }
+        @Quando("chamar a api para listar por id")
+        public void chamarAApiParaListarPorId () {
+            response = requestSpecification.when().get("http://64.226.114.207:3334/categories/3");
+
+        }
+        @Então("deve listar as categorias por id")
+        public void deveListarAsCategoriasPorId () {
+            response.then()
+                    .log().all()
+//                .body("$", hasSize(4))
+                    .body("id", hasItem(3))
+                    .body("name", hasItem("cozinha"))
+                    .body("alias", hasItem("cozinha"))
+            ;
+        }
+
     }
-
-
-
-}

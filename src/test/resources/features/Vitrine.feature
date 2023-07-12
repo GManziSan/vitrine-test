@@ -47,4 +47,23 @@ Funcionalidade: Categorias
      Quando chamar a api com delete para o endpoint
      Então deve excluir a categoria
 
+    Cenário: Listar Categoria
+      Dado um conjunto de categorias
+      Quando chamar a api para listar
+      Então deve listar as categorias
+
+    Cenário: Listar Categoria por Nome
+      Dado um conjunto de categorias
+      Quando chamar a api para listar por nome
+      Então deve listar as categorias por nome
+
+    Cenário: Listar Categoria por Alias
+      Dado um conjunto de categorias
+      Quando chamar a api para listar por alias
+      Então deve listar as categorias por alias
+
+    Cenário: Listar Categoria por id
+      Dado um conjunto de categorias
+      Quando chamar a api para listar por id
+      Então deve listar as categorias por id
 
