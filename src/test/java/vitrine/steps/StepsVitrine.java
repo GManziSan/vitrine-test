@@ -19,6 +19,7 @@ public class StepsVitrine {
     private static String CONTA_NAME = "Conta " + System.nanoTime();
     private static String ALIAS_NAME = "Alias " + System.nanoTime();
     private static Integer contaId;
+    private static Integer contaAlteracao;
 
 
     @Dado("uma categoria básica")
@@ -186,5 +187,33 @@ public class StepsVitrine {
                     .body("alias", hasItem("cozinha"))
             ;
         }
+
+    @Dado("uma categoria criada")
+    public void umaCategoriaCriada() {
+        contaAlteracao = given()
+               .log().all()
+               .contentType(ContentType.JSON)
+               .body("{\"name\": \"conta1\", \"alias\": \"alias1\"}")
+                .when().post("http://64.226.114.207:3334/categories")
+                .then().log().all()
+                .extract().path("id")
+        ;
+    }
+    @Quando("alterar a categoria")
+    public void alterarACategoria() {
+       response = given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .body("{\"name\": \"contaAlterada\", \"alias\": \"aliasAlterado\"}")
+                .when().put("http://64.226.114.207:3334/categories/" + contaAlteracao)
+        ;
+
+    }
+    @Então("deve alterar a categoria")
+    public void deveAlterarACategoria() {
+        response.then().log().all().statusCode(200).body("name", hasItem("contaAlterada"))
+                ;
+
+    }
 
     }

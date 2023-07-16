@@ -67,3 +67,7 @@ Funcionalidade: Categorias
       Quando chamar a api para listar por id
       Então deve listar as categorias por id
 
+    Cenário: modificar uma categoria
+      Dado uma categoria criada
+      Quando alterar a categoria
+      Então deve alterar a categoria
