@@ -18,8 +18,9 @@ public class StepsVitrine {
     private Response response;
     private static String CONTA_NAME = "Conta " + System.nanoTime();
     private static String ALIAS_NAME = "Alias " + System.nanoTime();
-    private static Integer contaId;
+    private static Integer contaDelete;
     private static Integer contaAlteracao;
+    private static Integer contaId;
 
 
     @Dado("uma categoria básica")
@@ -108,19 +109,26 @@ public class StepsVitrine {
 
     @Dado("uma categoria existente")
     public void umaCategoriaExistente() {
-        requestSpecification = given()
+        contaDelete = given()
                 .log().all()
                 .contentType(ContentType.JSON)
-                ;
+                .body("{\"name\": \"conta1\", \"alias\": \"alias1\"}")
+                .when().post("http://64.226.114.207:3334/categories")
+                .then().log().all()
+                .extract().path("id")
+        ;
     }
     @Quando("chamar a api com delete para o endpoint")
     public void chamarAApiComDeleteParaOEndpoint() {
-        response = requestSpecification.when().delete("http://64.226.114.207:3334/categories/" + contaId);
+        response = given()
+                .log().all()
+                .contentType(ContentType.JSON)
+                .when().delete("http://64.226.114.207:3334/categories/" + contaDelete);
     }
         @Então("deve excluir a categoria")
         public void deveExcluirACategoria () {
             response.then().log().all()
-                    .statusCode(204)
+                    .statusCode(200)
             ;
         }
 
